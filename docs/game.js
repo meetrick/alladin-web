@@ -4,10 +4,6 @@ const controls = document.querySelector("#controls");
 const statusMessage = document.querySelector("#status");
 const retry = document.querySelector("#retry");
 const pause = document.querySelector("#pause");
-const keyboard = document.querySelector("#keyboard");
-const textForm = document.querySelector("#dos-text");
-const word = document.querySelector("#dos-word");
-
 let ci;
 let paused = false;
 
@@ -28,7 +24,7 @@ function launch() {
 
   try {
     player = window.Dos(dos, {
-      url: new URL("./aladdin.jsdos?v=1", import.meta.url).href,
+      url: new URL("./aladdin.jsdos?v=2", import.meta.url).href,
       pathPrefix: "https://v8.js-dos.com/8.xx/8.3.14/emulators/",
       backend: "dosbox",
       workerThread: true,
@@ -50,7 +46,6 @@ function launch() {
         ci = commandInterface;
         loading.hidden = true;
         controls.disabled = false;
-        keyboard.hidden = false;
       },
     });
     player.setNoCloud(true);
@@ -110,25 +105,6 @@ pause.addEventListener("click", () => {
   else ci.resume();
   pause.setAttribute("aria-pressed", String(paused));
   pause.textContent = paused ? "재개" : "정지";
-});
-
-for (const eventName of ["keydown", "keyup", "keypress"]) {
-  textForm.addEventListener(eventName, (event) => event.stopPropagation());
-}
-
-textForm.addEventListener("submit", async (event) => {
-  event.preventDefault();
-  if (!ci || paused || word.readOnly) return;
-  const letters = word.value.toUpperCase();
-  word.readOnly = true;
-  word.blur();
-  for (const letter of letters) {
-    ci.simulateKeyPress(letter.charCodeAt(0));
-    await new Promise((resolve) => setTimeout(resolve, 160));
-  }
-  ci.simulateKeyPress(257);
-  word.value = "";
-  word.readOnly = false;
 });
 
 launch();

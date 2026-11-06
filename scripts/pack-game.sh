@@ -2,6 +2,11 @@
 set -eu
 
 root=$(CDPATH='' cd -- "$(dirname -- "$0")/.." && pwd)
+use_patched=false
+if [ "${1:-}" = "--patched" ]; then
+  use_patched=true
+  shift
+fi
 source_dir="${1:-$root/alladin}"
 output="$root/docs/aladdin.jsdos"
 
@@ -13,6 +18,10 @@ if [ -f "$source_dir/disk1.dat" ] && [ -f "$source_dir/disk2.dat" ]; then
   # Restore the original DOS executable and data from the installation disks.
   tar -xf "$source_dir/disk1.dat" -C "$work/bundle"
   tar -xf "$source_dir/disk2.dat" -C "$work/bundle"
+  if [ "$use_patched" = true ]; then
+    cp "$source_dir/aladdin.exe" "$work/bundle/ALADDIN.EXE"
+    cp "$source_dir/tarquin.dat" "$work/bundle/TARQUIN.DAT"
+  fi
   if [ -f "$source_dir/sound.cfg" ]; then
     cp "$source_dir/sound.cfg" "$work/bundle/SOUND.CFG"
   fi

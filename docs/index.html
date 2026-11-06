@@ -6,9 +6,9 @@
   <meta name="theme-color" content="#101114">
   <title>알라딘 DOS</title>
   <link rel="stylesheet" href="https://v8.js-dos.com/8.xx/8.3.14/js-dos.css">
-  <link rel="stylesheet" href="./style.css?v=3">
+  <link rel="stylesheet" href="./style.css?v=4">
   <script defer src="https://v8.js-dos.com/8.xx/8.3.14/js-dos.js"></script>
-  <script type="module" src="./game.js"></script>
+  <script type="module" src="./game.js?v=2"></script>
 </head>
 <body>
   <main aria-label="알라딘 DOS 게임">
@@ -34,19 +34,11 @@
           <button type="button" data-key="32">점프</button>
         </div>
         <div class="utility-controls">
-          <button type="button" data-key="257">확인</button>
+          <button type="button" data-key="257">엔터</button>
           <button type="button" data-key="256">뒤로</button>
           <button type="button" id="pause" aria-pressed="false">정지</button>
         </div>
       </fieldset>
-      <details id="keyboard" hidden>
-        <summary>영문 키보드</summary>
-        <form id="dos-text" class="text-entry">
-          <label class="sr-only" for="dos-word">게임 화면에서 요청한 영문 단어</label>
-          <input id="dos-word" type="text" placeholder="게임에서 요청한 영문 단어" pattern="[A-Za-z]+" autocapitalize="none" autocomplete="off" spellcheck="false" required>
-          <button type="submit">입력</button>
-        </form>
-      </details>
     </section>
   </main>
 </body>

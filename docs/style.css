@@ -18,7 +18,7 @@ main { max-width: 680px; margin: 0 auto; }
 .cabinet {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  grid-template-areas: "screen screen" "dpad actions" "menu menu" "keyboard keyboard";
+  grid-template-areas: "screen screen" "dpad actions" "menu menu";
   align-items: center;
   gap: 8px;
 }
@@ -88,11 +88,6 @@ button {
 .utility-controls { grid-area: menu; display: flex; justify-content: center; gap: 6px; }
 .utility-controls button { min-width: 52px; }
 
-details { grid-area: keyboard; justify-self: center; font-size: 13px; text-align: center; }
-summary { cursor: pointer; }
-.text-entry { display: flex; justify-content: center; gap: 6px; margin-top: 4px; }
-.text-entry input { min-width: 0; padding: 0 8px; font-size: 16px; }
-
 .sr-only {
   position: absolute;
   width: 1px;
@@ -104,37 +99,39 @@ summary { cursor: pointer; }
 
 @media (orientation: landscape) and (max-height: 540px),
        (orientation: landscape) and (pointer: coarse) {
+  body {
+    --game-height: calc(100dvh - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    padding: env(safe-area-inset-top) max(4px, env(safe-area-inset-right))
+      env(safe-area-inset-bottom) max(4px, env(safe-area-inset-left));
+  }
   main { max-width: none; }
   .cabinet {
-    --side-width: clamp(98px, 15vw, 138px);
-    grid-template-columns: var(--side-width) minmax(0, 1fr) var(--side-width);
+    grid-template-columns: auto minmax(0, 1fr) auto;
     grid-template-rows: 1fr 1fr;
-    grid-template-areas: "dpad screen actions" "keyboard screen menu";
-    gap: 4px;
-  }
-  .screen {
-    max-width: calc((100dvh - max(8px, env(safe-area-inset-top)) - max(8px, env(safe-area-inset-bottom))) * 4 / 3);
-    justify-self: center;
-  }
-  .dpad, .actions {
-    width: 100%;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    align-self: end;
-  }
-  .utility-controls {
-    flex-wrap: wrap;
-    align-self: start;
+    grid-template-areas: "dpad screen actions" "dpad screen menu";
+    min-height: var(--game-height);
     gap: 3px;
   }
-  .utility-controls button { min-width: 44px; }
-  details { position: relative; align-self: start; }
-  summary { padding: 12px 0; }
-  .text-entry {
-    position: absolute;
-    z-index: 1;
-    inset-inline-start: 0;
-    width: max-content;
-    padding: 6px;
-    background: #101114;
+  .screen {
+    max-width: calc(var(--game-height) * 4 / 3);
+    justify-self: center;
   }
+  .dpad, .actions, .utility-controls {
+    display: grid;
+    grid-template-columns: repeat(2, 44px);
+    gap: 3px;
+  }
+  .dpad button:first-child, .dpad button:nth-child(3) {
+    grid-column: 1 / -1;
+    width: 44px;
+    justify-self: center;
+  }
+  .dpad button:nth-child(3) { grid-row: 3; }
+  .actions { align-self: end; }
+  .actions button:last-child {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .utility-controls { align-self: start; }
+  .utility-controls button { min-width: 44px; }
 }
