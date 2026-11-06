@@ -9,6 +9,55 @@ let paused = false;
 
 retry.addEventListener("click", () => location.reload());
 
+function isStartupPrompt(width, height, rgb, rgba) {
+  const frame = rgb ?? rgba;
+  if (!frame || width !== 320 || height !== 200) return false;
+
+  // Fingerprint the fixed prompt text. The page numbers and blinking cursor
+  // are below this band and can vary between runs.
+  const stride = rgb ? 3 : 4;
+  let hash = 2166136261;
+  for (let pixel = 20 * width; pixel < 58 * width; pixel++) {
+    const bright = frame[pixel * stride + 2] > 100;
+    hash = Math.imul(hash ^ bright, 16777619);
+  }
+  return (hash >>> 0) === 0x77e75e20;
+}
+
+function finishStartup(commandInterface) {
+  let ready = false;
+  let attempts = 0;
+  let retryAfter = 0;
+  const fallback = setTimeout(showGame, 12000);
+
+  function showGame() {
+    clearTimeout(fallback);
+    ready = true;
+    loading.hidden = true;
+    controls.disabled = false;
+  }
+
+  commandInterface.events().onFrame((rgb, rgba) => {
+    const frame = rgb ?? rgba;
+    if (ready || !frame) return;
+    const matches = isStartupPrompt(commandInterface.width(), commandInterface.height(), rgb, rgba);
+    if (!matches) {
+      if (attempts > 0) showGame();
+      return;
+    }
+
+    // Wait for the input cursor, which is drawn after the prompt text.
+    const stride = rgb ? 3 : 4;
+    if (frame[(179 * 320 + 83) * stride + 2] <= 100) return;
+    const now = performance.now();
+    if (attempts >= 3 || now < retryAfter) return;
+    attempts++;
+    retryAfter = now + 500;
+    commandInterface.sendKeyEvent(257, true);
+    setTimeout(() => commandInterface.sendKeyEvent(257, false), 120);
+  });
+}
+
 function launch() {
   let player;
   let expired = false;
@@ -44,8 +93,7 @@ function launch() {
         }
         clearTimeout(timeout);
         ci = commandInterface;
-        loading.hidden = true;
-        controls.disabled = false;
+        finishStartup(commandInterface);
       },
     });
     player.setNoCloud(true);
