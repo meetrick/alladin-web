@@ -85,7 +85,13 @@ button {
 .actions button { border-radius: 50%; border-color: #826352; background: #533d38; }
 .actions button:last-child { grid-column: 3; grid-row: 1; }
 .actions button:not(:last-child) { grid-row: 2; }
-.utility-controls { grid-area: menu; display: flex; justify-content: center; gap: 6px; }
+.utility-controls {
+  grid-area: menu;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-block: 20px 12px;
+}
 .utility-controls button { min-width: 52px; }
 
 .sr-only {
@@ -107,16 +113,15 @@ button {
   main { max-width: none; }
   .cabinet {
     grid-template-columns: auto minmax(0, 1fr) auto;
-    grid-template-rows: 1fr 1fr;
-    grid-template-areas: "dpad screen actions" "dpad screen menu";
-    min-height: var(--game-height);
+    grid-template-rows: minmax(var(--game-height), auto) auto;
+    grid-template-areas: "dpad screen actions" "menu menu menu";
     gap: 3px;
   }
   .screen {
     max-width: calc(var(--game-height) * 4 / 3);
     justify-self: center;
   }
-  .dpad, .actions, .utility-controls {
+  .dpad, .actions {
     display: grid;
     grid-template-columns: repeat(2, 44px);
     gap: 3px;
@@ -127,11 +132,8 @@ button {
     justify-self: center;
   }
   .dpad button:nth-child(3) { grid-row: 3; }
-  .actions { align-self: end; }
   .actions button:last-child {
     grid-column: 2;
     grid-row: 1;
   }
-  .utility-controls { align-self: start; }
-  .utility-controls button { min-width: 44px; }
 }
