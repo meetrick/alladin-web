@@ -32,9 +32,9 @@ main { max-width: 680px; margin: 0 auto; }
   background: #000;
 }
 
-#dos, .loading { position: absolute; inset: 0; }
+#dos, .game-status { position: absolute; inset: 0; }
 #dos { width: 100%; height: 100%; }
-.loading {
+.game-status {
   display: grid;
   place-content: center;
   justify-items: center;
@@ -42,7 +42,7 @@ main { max-width: 680px; margin: 0 auto; }
   text-align: center;
   background: #000;
 }
-.loading p { margin: 0; padding: 0 12px; }
+.game-status p { margin: 0; padding: 0 12px; }
 
 button {
   min-height: 44px;
