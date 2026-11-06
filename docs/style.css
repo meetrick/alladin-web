@@ -80,8 +80,8 @@ button {
   gap: 3px;
 }
 .dpad { grid-area: dpad; justify-self: start; }
-.dpad button:first-child { grid-column: 2; }
-.dpad button:nth-child(2) { grid-column: 1; }
+.dpad button:first-child { grid-area: 1 / 2; }
+.dpad button:not(:first-child) { grid-row: 2; }
 .actions { grid-area: actions; justify-self: end; }
 .actions button { border-radius: 50%; border-color: #826352; background: #533d38; }
 .actions button:last-child { grid-column: 3; grid-row: 1; }
@@ -128,17 +128,12 @@ button {
     /* The two button groups take up 182px before their separation. */
     gap: clamp(44px, calc(var(--game-height) - 182px), 100px);
   }
-  .dpad, .actions, .utility-controls {
+  .dpad { grid-template-columns: repeat(3, 44px); }
+  .actions, .utility-controls {
     display: grid;
     grid-template-columns: repeat(2, 44px);
     gap: 3px;
   }
-  .dpad button:first-child, .dpad button:nth-child(3) {
-    grid-column: 1 / -1;
-    width: 44px;
-    justify-self: center;
-  }
-  .dpad button:nth-child(3) { grid-row: 3; }
   .actions, .utility-controls { grid-area: auto; }
   .actions button:last-child {
     grid-column: 2;
