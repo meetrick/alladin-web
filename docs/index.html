@@ -5,8 +5,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <meta name="theme-color" content="#101114">
   <title>알라딘 DOS</title>
+  <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png">
+  <link rel="icon" type="image/png" sizes="192x192" href="./icons/aladdin-192.png">
+  <link rel="manifest" href="./manifest.webmanifest">
   <link rel="stylesheet" href="https://v8.js-dos.com/8.xx/8.3.14/js-dos.css">
-  <link rel="stylesheet" href="./style.css?v=5">
+  <link rel="stylesheet" href="./style.css?v=6">
   <script defer src="https://v8.js-dos.com/8.xx/8.3.14/js-dos.js"></script>
   <script type="module" src="./game.js?v=3"></script>
 </head>
@@ -28,15 +31,17 @@
           <button type="button" data-key="264" aria-label="아래">▼</button>
           <button type="button" data-key="262" aria-label="오른쪽">▶</button>
         </div>
-        <div class="actions">
-          <button type="button" data-key="342">사과</button>
-          <button type="button" data-key="341">칼</button>
-          <button type="button" data-key="32">점프</button>
-        </div>
-        <div class="utility-controls" role="group" aria-label="DOS 메뉴 조작">
-          <button type="button" data-key="257">엔터</button>
-          <button type="button" data-key="256">뒤로</button>
-          <button type="button" id="pause" aria-pressed="false">정지</button>
+        <div class="right-controls">
+          <div class="actions">
+            <button type="button" data-key="342">사과</button>
+            <button type="button" data-key="341">칼</button>
+            <button type="button" data-key="32">점프</button>
+          </div>
+          <div class="utility-controls" role="group" aria-label="DOS 메뉴 조작">
+            <button type="button" data-key="257">엔터</button>
+            <button type="button" data-key="256">뒤로</button>
+            <button type="button" id="pause" aria-pressed="false">정지</button>
+          </div>
         </div>
       </fieldset>
     </section>

@@ -59,6 +59,7 @@ button {
 :focus-visible { outline: 2px solid #fac576; outline-offset: 2px; }
 
 .controls { display: contents; }
+.right-controls { display: contents; }
 .controls:disabled button { opacity: .5; }
 .controls button {
   padding: 0;
@@ -90,7 +91,7 @@ button {
   display: flex;
   justify-content: center;
   gap: 6px;
-  margin-block: 20px 12px;
+  margin-block: 48px 12px;
 }
 .utility-controls button { min-width: 52px; }
 
@@ -113,15 +114,21 @@ button {
   main { max-width: none; }
   .cabinet {
     grid-template-columns: auto minmax(0, 1fr) auto;
-    grid-template-rows: minmax(var(--game-height), auto) auto;
-    grid-template-areas: "dpad screen actions" "menu menu menu";
+    grid-template-rows: minmax(var(--game-height), auto);
+    grid-template-areas: "dpad screen right";
     gap: 3px;
   }
   .screen {
     max-width: calc(var(--game-height) * 4 / 3);
     justify-self: center;
   }
-  .dpad, .actions {
+  .right-controls {
+    grid-area: right;
+    display: grid;
+    /* The two button groups take up 182px before their separation. */
+    gap: clamp(44px, calc(var(--game-height) - 182px), 100px);
+  }
+  .dpad, .actions, .utility-controls {
     display: grid;
     grid-template-columns: repeat(2, 44px);
     gap: 3px;
@@ -132,8 +139,11 @@ button {
     justify-self: center;
   }
   .dpad button:nth-child(3) { grid-row: 3; }
+  .actions, .utility-controls { grid-area: auto; }
   .actions button:last-child {
     grid-column: 2;
     grid-row: 1;
   }
+  .utility-controls { margin: 0; }
+  .utility-controls button { min-width: 44px; }
 }
