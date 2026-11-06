@@ -1,6 +1,7 @@
 const dos = document.querySelector("#dos");
 const loading = document.querySelector("#loading");
 const controls = document.querySelector("#controls");
+const dpad = document.querySelector(".dpad");
 const statusMessage = document.querySelector("#status");
 const retry = document.querySelector("#retry");
 const pause = document.querySelector("#pause");
@@ -107,6 +108,15 @@ function launch() {
 // directions can be held while jumping or attacking.
 const held = new Map();
 
+function press(pointerId, button) {
+  if (held.get(pointerId) === button) return;
+  release(pointerId);
+  if (!button) return;
+  if (!button.hasAttribute("data-held")) ci.sendKeyEvent(Number(button.dataset.key), true);
+  held.set(pointerId, button);
+  button.dataset.held = "";
+}
+
 function release(pointerId) {
   const button = held.get(pointerId);
   if (!button) return;
@@ -126,9 +136,7 @@ for (const button of controls.querySelectorAll("[data-key]")) {
     if (!ci || paused || event.button !== 0) return;
     event.preventDefault();
     button.setPointerCapture(event.pointerId);
-    if (!button.hasAttribute("data-held")) ci.sendKeyEvent(code, true);
-    held.set(event.pointerId, button);
-    button.dataset.held = "";
+    press(event.pointerId, button);
   });
 
   for (const eventName of ["pointerup", "pointercancel", "lostpointercapture"]) {
@@ -139,6 +147,12 @@ for (const button of controls.querySelectorAll("[data-key]")) {
     if (ci && !paused && event.detail === 0) ci.simulateKeyPress(code);
   });
 }
+
+dpad.addEventListener("pointermove", (event) => {
+  if (paused || !event.target.hasPointerCapture(event.pointerId)) return;
+  const button = document.elementFromPoint(event.clientX, event.clientY)?.closest(".dpad button");
+  press(event.pointerId, button);
+});
 
 controls.addEventListener("contextmenu", (event) => event.preventDefault());
 window.addEventListener("blur", releaseAll);

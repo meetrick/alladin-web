@@ -16,6 +16,9 @@ body {
 
 main { max-width: 680px; margin: 0 auto; }
 .cabinet {
+  --key-size: clamp(44px, 12vw, 54px);
+  --key-gap: 5px;
+  --portrait-control-space: clamp(16px, calc((100dvh - 530px) * .22), 88px);
   display: grid;
   grid-template-columns: 1fr 1fr;
   grid-template-areas: "screen screen" "dpad actions" "menu menu";
@@ -69,23 +72,75 @@ button {
   -webkit-user-select: none;
   -webkit-touch-callout: none;
 }
-.controls button[data-held], .controls button:active, #pause[aria-pressed="true"] {
-  background: #fac576;
-  color: #141214;
-}
-
 .dpad, .actions {
   display: grid;
-  grid-template-columns: repeat(3, clamp(40px, 11vw, 54px));
-  gap: 3px;
+  gap: var(--key-gap);
+  margin-block-start: var(--portrait-control-space);
 }
-.dpad { grid-area: dpad; justify-self: start; }
+
+.dpad {
+  grid-area: dpad;
+  grid-template-columns: repeat(3, var(--key-size));
+  justify-self: start;
+  touch-action: none;
+}
+.dpad button {
+  min-height: var(--key-size);
+  border-color: #4a4e5f;
+  border-radius: 10px;
+  background: #292c37;
+  box-shadow: inset 0 -3px #1a1c25;
+  font-size: 21px;
+  line-height: 1;
+}
 .dpad button:first-child { grid-area: 1 / 2; }
 .dpad button:not(:first-child) { grid-row: 2; }
-.actions { grid-area: actions; justify-self: end; }
-.actions button { border-radius: 50%; border-color: #826352; background: #533d38; }
-.actions button:last-child { grid-column: 3; grid-row: 1; }
-.actions button:not(:last-child) { grid-row: 2; }
+
+.actions {
+  grid-area: actions;
+  grid-template-columns: var(--key-size) minmax(var(--key-size), 60px);
+  grid-template-areas: "apple jump" "sword jump";
+  align-items: center;
+  justify-self: end;
+}
+.actions button {
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 2px;
+  min-height: var(--key-size);
+  border-radius: 14px;
+  line-height: 1;
+}
+.actions svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+.actions .action-apple {
+  grid-area: apple;
+  border-color: #855363;
+  background: #4f2d3b;
+  color: #ffd8e1;
+}
+.actions .action-sword {
+  grid-area: sword;
+  border-color: #555c83;
+  background: #333753;
+  color: #e4e7ff;
+}
+.actions .action-jump {
+  grid-area: jump;
+  min-height: 64px;
+  border-color: #f6d38e;
+  background: #eac078;
+  color: #231b13;
+  box-shadow: inset 0 -4px #bd914d;
+}
 .utility-controls {
   grid-area: menu;
   display: flex;
@@ -93,7 +148,20 @@ button {
   gap: 6px;
   margin-block: 48px 12px;
 }
-.utility-controls button { min-width: 52px; }
+.utility-controls button {
+  min-width: 52px;
+  border-color: #373a46;
+  background: #1b1d26;
+  color: #c4c6d2;
+}
+.controls button[data-held], .controls button:active, #pause[aria-pressed="true"] {
+  background: #fac576;
+  color: #141214;
+  box-shadow: none;
+}
+.actions .action-jump[data-held], .actions .action-jump:active {
+  background: #ffe5ae;
+}
 
 .sr-only {
   position: absolute;
@@ -113,6 +181,10 @@ button {
   }
   main { max-width: none; }
   .cabinet {
+    --key-size: 44px;
+    --key-gap: 3px;
+    --portrait-control-space: 0px;
+    --thumb-bottom: clamp(12px, 6dvh, 32px);
     grid-template-columns: auto minmax(0, 1fr) auto;
     grid-template-rows: minmax(var(--game-height), auto);
     grid-template-areas: "dpad screen right";
@@ -125,20 +197,23 @@ button {
   .right-controls {
     grid-area: right;
     display: grid;
-    /* The two button groups take up 182px before their separation. */
-    gap: clamp(44px, calc(var(--game-height) - 182px), 100px);
+    grid-template-rows: auto 1fr auto;
+    height: 100%;
   }
-  .dpad { grid-template-columns: repeat(3, 44px); }
-  .actions, .utility-controls {
+  .dpad, .actions {
+    align-self: end;
+    margin-block-end: var(--thumb-bottom);
+  }
+  .actions {
+    grid-area: 3 / 1;
+    grid-template-columns: repeat(2, var(--key-size));
+  }
+  .utility-controls {
+    grid-area: 1 / 1;
     display: grid;
-    grid-template-columns: repeat(2, 44px);
-    gap: 3px;
+    grid-template-columns: repeat(2, var(--key-size));
+    gap: var(--key-gap);
+    margin: 8px 0 0;
   }
-  .actions, .utility-controls { grid-area: auto; }
-  .actions button:last-child {
-    grid-column: 2;
-    grid-row: 1;
-  }
-  .utility-controls { margin: 0; }
   .utility-controls button { min-width: 44px; }
 }
